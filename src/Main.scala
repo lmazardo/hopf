@@ -1,16 +1,26 @@
-import hopf.common.TypeSynonyms._
+import hopf.common._
 import hopf.categorical._
+import hopf.categorical.Arrow._
+
+import TypeSynonyms._
+import IntShorthands._
 
 object Main extends App {
   val cat = implicitly[Category[Fun]]
   import cat._
-    
-  val kokoko = ((x: Int) => 1 + x) >> (_ * 2) >> { z =>    
-    println(z)
-    println("i see dead people")
-  }
   
-  val c = (x: Int) => (x, x)
+  val arr = implicitly[Arrow[Fun, Tup] with Split[Fun, Tup]]
+  import arr._
   
-  kokoko(3)
+  import Functor.listFunctor._
+  
+  def ys = List((1, 2), (2, 3))
+    .fmap(add(1) *** mul(2))
+    .foldLeft((0, 0)){ case (acc, (x, y)) =>
+      (add(x) *** mul(y))(acc)
+    }
+  
+  val moo = (add(1) *** mul(2)) >> println _
+  
+  moo(ys)
 }
