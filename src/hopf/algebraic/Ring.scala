@@ -7,7 +7,7 @@ abstract class Ring[R] extends Additivity[R] with Multiplicativity[R] {
   def add = sumGroup.op
   def mul = mulMonoid.op
   
-  def sub = (a: R, b: R) => add(a, neg(b))
+  def sub = (a: R, b: R) => a + neg(b)
   
   def neg: R => R = sumGroup.inverse
     
@@ -16,13 +16,14 @@ abstract class Ring[R] extends Additivity[R] with Multiplicativity[R] {
   
   implicit class RingEnriched(a: R) {
     def +(b: R): R = add(a, b)
+    def -(b: R): R = sub(a, b)
     def *(b: R): R = mul(a, b)
   }
   
   lazy val sumGroup = new Group[R] with Commutativity {
     def op = add
     val id = zero
-    def inverse = (x: R) => add(id, neg(x))
+    def inverse = (x: R) => id - x
   }
   
   lazy val mulMonoid = new Monoid[R] {
