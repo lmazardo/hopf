@@ -14,10 +14,10 @@ object FloatShorthands {
 
 object NumericShorthands {
   type I = Int
-  def iadd = IntShorthands.add(_)
-  def imul = IntShorthands.mul(_)
+  def iadd = IntShorthands.add _
+  def imul = IntShorthands.mul _
   
   type F = Float
-  def fadd = FloatShorthands.add(_)
-  def fmul = FloatShorthands.mul(_)  
+  def fadd = FloatShorthands.add _
+  def fmul = FloatShorthands.mul _  
 }

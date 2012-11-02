@@ -3,27 +3,40 @@ package hopf.categorical
 import hopf.structural._
 import hopf.common.TypeSynonyms._
 
-abstract class Monad[M[_]] {
-  def ret[A](x: A): M[A]
-  def bind[A, B](a: M[A], f: A => M[B]): M[B]
+import Category.function._
+
+abstract class Monad[M[_]] extends Joinable[M] {
+  def ret[A]: A => M[A] = pointable.point  
+  
+  def bind[A, B]: (M[A], A => M[B]) => M[B] = {
+    import applicative._
+    (mx, mf) => join(ret(mf) <*> mx)
+  }
+  
+  def join[A] = joinable.join
   
   implicit class BindEnriched[A](a: M[A]) {
-    def >>=[B](f: A => M[B]) = Monad.this.bind(a, f)
+    def >>=[B](f: A => M[B]) = bind(a, f)
   }
   
   implicit class JoinEnriched[A](a: M[M[A]]) {
-    def join = bind(a, identity[M[A]])
+    def join = Monad.this.join(a)
   }
   
-  implicit lazy val asPoint = new Point[M] {
-    def point[A](x: A) = ret(x)
+  lazy val pointable = new Pointable[M] {
+    def point[A] = ret
   }
   
-  implicit lazy val asApply = new Apply[M] {
-    def apply[A, B](mf: M[A => B], mx: M[A]) = mf >>= (f => mx >>= (x => ret(f(x))))
+  lazy val applicable = new Applicable[M] {
+    def apply[A, B] = (mf, mx) => mf >>= (f => mx >>= (f >> ret))
   }
   
-  implicit lazy val asFunctor = Functor.fromPointApply(asPoint, asApply)
+  lazy val joinable = new Joinable[M] {
+    def join[A] = _ >>= identity
+  }
   
-  implicit lazy val asApplicative = Applicative.fromPointApplyFunctor(asPoint, asApply, asFunctor)
+  lazy val applicative = new Applicative[M] {
+    override def pure[A] = ret    
+    override def apply[A, B] = applicable.apply
+  }
 }

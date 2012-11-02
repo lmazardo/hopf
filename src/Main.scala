@@ -16,7 +16,7 @@ object Main extends App {
   
   def ys = List((1, 2), (2, 3))
     .fmap(add(1) *** mul(2))
-    .foldLeft((0, 0)){ case (acc, (x, y)) =>
+    .foldLeft((0, 1)){ case (acc, (x, y)) =>
       (add(x) *** mul(y))(acc)
     }
   

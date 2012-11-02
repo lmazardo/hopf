@@ -3,13 +3,12 @@ package hopf.categorical
 import hopf.common.TypeSynonyms._
 import hopf.structural._
 
-abstract class Applicative[F[_]] {
-  def pure[A](x: A): F[A]
+abstract class Applicative[F[_]] extends Applicable[F] {
+  def pure[A]: A => F[A] = pointable.point  
+  def apply[A, B] = applicable.apply
   
-  def apply[A, B](f: F[A => B], x: F[A]): F[B]
-  
-  def seqDropLeft [A, B](a: F[A], b: F[B]): F[B]
-  def seqDropRight[A, B](a: F[A], b: F[B]): F[A]
+  def seqDropLeft [A, B]: (F[A], F[B]) => F[B] = functor.fmap((x:A) => (y:B) => y)(_) <*> _
+  def seqDropRight[A, B]: (F[A], F[B]) => F[A] = functor.fmap((x:A) => (y:B) => x)(_) <*> _
   
   implicit class ApplyApplicativeEnriched[A, B](f: F[A => B]) {
     def <*>(x: F[A]) = apply(f, x)
@@ -20,33 +19,34 @@ abstract class Applicative[F[_]] {
     def <*[B](b: F[B]) = seqDropRight(a, b)    
   }
   
-  implicit lazy val asPoint = new Point[F] {
-    def point[A](x: A) = pure(x)
-  }    
-  
-  implicit lazy val asApply = new Apply[F] {
-    def apply[A, B](f: F[A => B], x: F[A]) = Applicative.this.apply(f, x)
+  lazy val pointable = new Pointable[F] {
+    def point[A] = pure
   }
   
-  implicit lazy val asFunctor = Functor.fromPointApply(asPoint, asApply)
+  lazy val applicable = new Applicable[F] {
+    def apply[A, B] = Applicative.this.apply
+  }
+  
+  lazy val functor = Functor.fromPointApply(pointable, applicable)
 }
 
-object Applicative {  
+object Applicative {
+  /*
   implicit def fromPointApplyFunctor[F[_]]
-      (implicit P: Point[F], A: Apply[F], F: Functor[F])
+      (implicit P: Pointable[F], A: Applicable[F], F: Functor[F])
     =
   new Applicative[F] {
     import F._
     
     override lazy val asPoint   = P    
-    override lazy val asApply   = A
+    override lazy val applicable   = A
     override lazy val asFunctor = F
     
     def pure[A](x: A) = P.point(x)
     def apply[A, B](f: F[A => B], x: F[A]) = A.apply(f, x)
     def seqDropLeft [A, B](a: F[A], b: F[B]) = a.fmap(x => (y:B) => y) <*> b
     def seqDropRight[A, B](a: F[A], b: F[B]) = a.fmap(x => (y:B) => x) <*> b
-  }
+  }*/
 }
 
 

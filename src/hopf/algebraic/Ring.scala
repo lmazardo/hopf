@@ -37,5 +37,5 @@ object Ring {
     override lazy val mulMonoid = mon      
   }
   
-  // val intRing = Ring(Group.intSum with Commutativity, Monoid.intMul)
+  val intRing = Ring(Group.intSum, Monoid.intMul)
 }

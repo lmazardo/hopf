@@ -15,7 +15,7 @@ abstract class Functor[F[_]] {
 }
 
 object Functor {
-  def fromPointApply[F[_]](P: Point[F], A: Apply[F]) = new Functor[F] {
+  def fromPointApply[F[_]](P: Pointable[F], A: Applicable[F]) = new Functor[F] {
     def fmap[A, B](f: A => B) = A.apply(P.point(f), _)
   }
   

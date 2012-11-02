@@ -12,8 +12,10 @@ abstract class Category[->[_, _]] {
 }
 
 object Category {  
-  implicit def funCat[A, B] = new Category[Fun] {
+  private implicit def mkFunCat[A, B] = new Category[Fun] {
     def id[A] = (x: A) => x
     def compose[A, B, C](f: A => B, g: B => C) = (x: A) => g(f(x)) 
   }
+  
+  implicit val function = implicitly[Category[Fun]]
 }
