@@ -4,8 +4,8 @@ import hopf.algebraic.properties._
 
 abstract class Ring[R] extends Additivity[R] with Multiplicativity[R] {
       
-  def add = sumGroup.op(_, _)  
-  def mul = mulMonoid.op(_, _)
+  def add = sumGroup.op
+  def mul = mulMonoid.op
   
   def sub = (a: R, b: R) => add(a, neg(b))
   
@@ -20,13 +20,13 @@ abstract class Ring[R] extends Additivity[R] with Multiplicativity[R] {
   }
   
   lazy val sumGroup = new Group[R] with Commutativity {
-    def op = add(_, _)    
+    def op = add
     val id = zero
     def inverse = (x: R) => add(id, neg(x))
   }
   
   lazy val mulMonoid = new Monoid[R] {
-    def op = add(_, _)
+    def op = mul
     val id = one
   }
 }
