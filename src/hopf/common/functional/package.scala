@@ -14,4 +14,9 @@ package object functional {
   implicit class UncurryEnriched[A, B, C](f: A => B => C) {
     def uncurry: (A, B) => C = f(_)(_)
   }
+  
+  implicit class IterateEnriched[A](x: A) {
+    def iterate(f: A => A): Stream[A] =
+      x #:: f(x).iterate(f)
+  }
 }
