@@ -1,12 +1,10 @@
 package hopf.categorical
 
 import hopf.structural._
-import hopf.common.TypeSynonyms._
-
 import Category.function._
 
 abstract class Monad[M[_]] extends Joinable[M] {
-  def ret[A]: A => M[A] = pointable.point  
+  def ret[A]: A => M[A] = applicative.pure  
   
   def bind[A, B]: (M[A], A => M[B]) => M[B] = {
     import applicative._

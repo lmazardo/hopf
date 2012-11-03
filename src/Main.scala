@@ -1,26 +1,18 @@
-import hopf.common._
 import hopf.categorical._
-import hopf.categorical.Arrow._
 
-import TypeSynonyms._
-import IntShorthands._
+import hopf.common.type_synonyms._
+import hopf.common.numeric._
 
-object Main extends App {
-  val cat = implicitly[Category[Fun]]
-  import cat._
-  
+object Main extends App {  
   val arr = implicitly[Arrow[Fun, Tup] with Split[Fun, Tup]]
   import arr._
   
-  import Functor.listFunctor._
-  
   def ys = List((1, 2), (2, 3))
-    .fmap(add(1) *** mul(2))
-    .foldLeft((0, 1)){ case (acc, (x, y)) =>
-      (add(x) *** mul(y))(acc)
+    .fmap (1.add *** 2.mul)    
+    .foldLeft (0, 1) { case (acc, (x, y)) =>
+      (x.add *** y.mul)(acc)
     }
   
-  val moo = (add(1) *** mul(2)) >> println _
-  
+  val moo = (1.add *** 2.mul) >> println _
   moo(ys)
 }

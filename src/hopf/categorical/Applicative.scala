@@ -1,6 +1,6 @@
 package hopf.categorical
 
-import hopf.common.TypeSynonyms._
+import hopf.common.type_synonyms._
 import hopf.structural._
 
 abstract class Applicative[F[_]] extends Applicable[F] {

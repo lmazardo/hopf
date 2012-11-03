@@ -1,7 +1,6 @@
 package hopf.structural
 
-import hopf.common.TypeSynonyms._
-import hopf.categorical.Functor._
+import hopf.common.type_synonyms._
 
 trait Applicable[S[_]] {
   def apply[A, B]: (S[A => B], S[A]) => S[B]  
