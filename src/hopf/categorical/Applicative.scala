@@ -1,6 +1,6 @@
 package hopf.categorical
 
-import hopf.common.type_synonyms._
+import hopf.util.types._
 import hopf.structural._
 
 abstract class Applicative[F[_]] {
@@ -10,27 +10,27 @@ abstract class Applicative[F[_]] {
   def seqDropLeft [A, B]: (F[A], F[B]) => F[B] = functor.fmap((x:A) => (y:B) => y)(_) <*> _
   def seqDropRight[A, B]: (F[A], F[B]) => F[A] = functor.fmap((x:A) => (y:B) => x)(_) <*> _
   
-  val pointable = new Pointable[F] {
+  def pointable = new Pointable[F] {
     def point[A] = pure
   }
   
-  val applicable = new Applicable[F] {
+  def applicable = new Applicable[F] {
     def apply[A, B] = Applicative.this.apply
   }
   
-  val functor = Functor(pointable, applicable)
+  def functor = Functor(pointable, applicable)
   
-  private implicit val $A: Applicative[F] = this
+  private implicit def $A: Applicative[F] = this
 }
 
 object Applicative {  
   def apply[F[_]](P: Pointable[F], A: Applicable[F], F: Functor[F]) = new Applicative[F] {
-    override val pointable  = P    
-    override val applicable = A
-    override val functor    = F
+    override def pointable  = P    
+    override def applicable = A
+    override def functor    = F
   }
   
-  implicit def fromPAF[F[_]](implicit P: Pointable[F], A: Applicable[F], F: Functor[F]) = Applicative(P, A, F)
+  implicit def infer[F[_]](implicit P: Pointable[F], A: Applicable[F], F: Functor[F]) = Applicative(P, A, F)
 }
 
 

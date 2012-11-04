@@ -1,6 +1,6 @@
 package hopf.categorical
 
-import hopf.common.type_synonyms._
+import hopf.util.types._
 
 abstract class Category[->[_, _]] {
   def id[A]: A -> A

@@ -1,6 +1,6 @@
 package hopf.categorical
 
-import hopf.common.type_synonyms._
+import hopf.util.types._
 
 abstract class Arrow[->[_, _], x[_, _]] {  
   def left [A, B, C](f: A -> B): (A x C) -> (B x C)

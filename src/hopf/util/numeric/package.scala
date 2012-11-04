@@ -1,4 +1,4 @@
-package hopf.common
+package hopf.util
 
 package object numeric {
   implicit class CurriedArithEnrichedNumeric[T](x: T)(implicit N: Numeric[T]) {

@@ -1,4 +1,4 @@
-package hopf.common
+package hopf.util
 
 package object functional {
   implicit class FlipEnriched[A, B, C](f: A => B => C) {
