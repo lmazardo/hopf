@@ -18,10 +18,6 @@ abstract class Monad[M[_]] {
       mf >>= (f => mx >>= (f >> ret))
   }
   
-  implicit class BindEnriched[A](a: M[A]) {
-    def >>=[B](f: A => M[B]) = bind(a)(f)
-  }
-  
   private implicit def $M: Monad[M] = this
   private implicit def $J: Joinable[M] = joinable
   private implicit def $A: Applicative[M] = applicative

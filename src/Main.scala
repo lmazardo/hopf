@@ -1,5 +1,6 @@
 import hopf.categorical._
 import hopf.structural._
+import hopf.contextual._
 
 import hopf.util.types._
 import hopf.util.functional._
@@ -24,7 +25,8 @@ object Main extends App {
   println(List(1, 2, 3) >>=
     {x => List(x, x)}
   ) // => List(1, 1, 2, 2, 3, 3)
-  
+    
+  /*
   val S = Stateful
   def incM = S.get[Int] >>= 1.add >> S.put  
   def incF = S.get[Int].fmap(1.add)
@@ -32,5 +34,5 @@ object Main extends App {
   println(
     incM.run(3),
     incF.run(3)
-  ) // => ((),4), (4,3)
+  )*/ // => ((),4), (4,3)
 }
