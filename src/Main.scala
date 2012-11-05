@@ -21,13 +21,14 @@ object Main extends App {
   
   def digits(x: Int) = x.iterate(_ / 10).takeWhile(_ > 0).map(_ % 10).reverse
 
-  println(List(1, 2, 3) >>= (x => List(x, x)))
-  // => List(1, 1, 2, 2, 3, 3)
+  println(List(1, 2, 3) >>=
+    {x => List(x, x)}
+  ) // => List(1, 1, 2, 2, 3, 3)
   
   val S = Stateful
-  def incM = S.get[Int] >>= 1.add >> S.put
+  def incM = S.get[Int] >>= 1.add >> S.put  
   def incF = S.get[Int].fmap(1.add)
-  
+
   println(
     incM.run(3),
     incF.run(3)
