@@ -1,29 +1,33 @@
 package hopf.categorical
 
-import hopf.structural._
-import hopf.common.functional._
-
-abstract class Functor[F[_]] {
-  def fmap[A, B]: (A => B) => F[A] => F[B]
+trait Functor[F <: Functorial] {
+  
+  protected def fmap[X]: (F#Hole => X) => F#Type => F#Fill[X]
+  
+  implicit class FmapEnriched(x: F) {
+    def fmap[X](f: F#Hole => X) = Functor.this.fmap(f)(x.forgetStructure)
+  }
 }
 
-object Functor {  
-  def apply[F[_]](P: Pointable[F], A: Applicable[F]) = new Functor[F] {
-    def fmap[A, B] = f =>
-      A.apply(P.point(f))(_)
-  }
- 
-  implicit val list = new Functor[List] {
-    def fmap[A, B] = f => {
-      case Nil     => Nil
-      case x :: xs => f(x) :: fmap(f)(xs)
+object functor {
+  
+  object tuple2 {
+    import functorial.tuple2._
+    
+    def in1[A, B] = new Functor[In1[A, B]] {
+      def fmap[X] = f => { case (a, b) => (f(a), b) }
+    }
+    
+    def in2[A, B] = new Functor[In2[A, B]] {
+      def fmap[X] = f => { case (a, b) => (a, f(b)) }
     }
   }
   
-  implicit val option = new Functor[Option] {
-    def fmap[A, B] = f => {
-      case None    => None
-      case Some(x) => Some(f(x))
-    }
+  object list {
+    import functorial.list._
+    
+    def inElem[T] = new Functor[InElem[T]] {
+      def fmap[X] = f => xs => xs.map(f)
+    }    
   }
 }

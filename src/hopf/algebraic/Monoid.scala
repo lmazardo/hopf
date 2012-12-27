@@ -1,15 +1,13 @@
 package hopf.algebraic
 
-import hopf.algebraic.properties._
-
-abstract class Monoid[T] extends Semigroup[T] with Identity[T]
+trait Monoid extends Semigroup {
+  def id: Carrier
+}
 
 object Monoid {
-  def apply[T](s: Semigroup[T], i: T) = new Monoid[T] {
-    def op = s.op
-    val id = i
+  def apply[C](fn: C => C => C, _1: C) = new Monoid {
+    type Carrier = C
+    def op = fn
+    def id = _1
   }
-  
-  val intSum = Monoid(Semigroup.intSum, 0)
-  val intMul = Monoid(Semigroup.intMul, 1)
 }
