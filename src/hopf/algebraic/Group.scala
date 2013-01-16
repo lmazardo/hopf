@@ -2,6 +2,7 @@ package hopf.algebraic
 
 trait Group extends Monoid {
   val inv: Carrier => Carrier
+  // prop inv
 }
 
 object Group {
@@ -11,9 +12,7 @@ object Group {
     val id  = _1
     val inv = _inv
   }
-  
-  class Properties(g: Group) extends Monoid.Properties(g)
-  
+
   implicit class AsGroup[C](f: (C, C) => C) {
     def asGroup(_1: C)(_inv: C => C) = Group[C](_1)(_inv)(f)
   }
