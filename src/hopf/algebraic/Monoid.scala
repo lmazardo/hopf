@@ -15,9 +15,7 @@ object Monoid {
   implicit class AsMonoid[C](f: (C, C) => C) {
     def asMonoid(_1: C) = Monoid[C](_1)(f)
   }
-}
 
-object monoid {
   object boolean {
     val and = Monoid[Boolean](true )(_ & _)
     val or  = Monoid[Boolean](false)(_ | _)

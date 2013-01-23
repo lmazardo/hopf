@@ -3,13 +3,13 @@ package hopf.functional
 import scala.annotation.tailrec
 import hopf.algebraic.Monoid
 
-case class Endo[T](fun: T => T) {
+final case class Endo[T](fun: T => T) {
   def apply(x: T) = fun(x)
 
-  @tailrec final def times(n: Int)(x: T): T =
+  @tailrec def times(n: Int)(x: T): T =
     if (n == 1) fun(x) else times(n - 1)(fun(x))
 
-  @tailrec final def until(cond: T => Boolean)(x: T): T =
+  @tailrec def until(cond: T => Boolean)(x: T): T =
     if (cond(x)) x else until(cond)(fun(x))
 }
 

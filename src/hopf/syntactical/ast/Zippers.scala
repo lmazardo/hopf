@@ -2,18 +2,20 @@ package hopf.syntactical.ast
 
 import scala.reflect.macros.Context
 import hopf.functional.Endo
-import hopf.contextual.zipper.ListZipper
-import hopf.contextual.zipper.ListZipperTemplate
+import hopf.zippers.list._
 
 class Zippers[C <: Context] private (val context: C) {
   import context.universe.{treeCopy => tc, _}
 
   class StatementZipper private (
     block:      Block,
-    val prefix: List[Tree],
-    val elem:   Tree,
-    val suffix: List[Tree]
-  ) extends ListZipperTemplate[Tree, StatementZipper](prefix, elem, suffix) {
+    prefix: List[Tree],
+    elem:   Tree,
+    suffix: List[Tree]
+  )
+  extends ListZipperTpl[Tree](prefix, elem, suffix) {
+
+    type This = this.type
 
     def mk(prefix: List[Tree], elem: Tree, suffix: List[Tree]) =
       new StatementZipper(block, prefix, elem, suffix)
