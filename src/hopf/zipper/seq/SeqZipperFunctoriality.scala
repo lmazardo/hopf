@@ -2,10 +2,10 @@ package hopf.zipper.seq
 
 import hopf.categorical._
 
-trait SeqZipperMap[Elem] {
-  type ThisG[X] <: SeqZipper
+trait SeqZipperFunctoriality[Elem] {
+  type ThisPoly[X] <: SeqZipper
 
-  def map[X](f: Elem => X): ThisG[X]
+  def map[X](f: Elem => X): ThisPoly[X]
 }
 
 /*

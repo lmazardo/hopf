@@ -2,13 +2,15 @@ package hopf.zipper.seq.product
 
 import hopf.zipper.seq.SeqZipper
 
-abstract class SeqZipperProduct[Z1 <: SeqZipper[Z1],
-                                Z2 <: SeqZipper[Z2],
-                                Z  <: SeqZipperProduct[Z1, Z2, Z]]
-  (fst: Z1, snd: Z2)
-extends SeqZipper[SeqZipperProduct[Z1, Z2, Z]] with Product {
+trait SeqZipperProduct [
+  Z1 <: SeqZipper,
+  Z2 <: SeqZipper
+]
+extends SeqZipper with Product {
+  def fst: Z1
+  def snd: Z2
 
-  def build(fst: Z1, snd: Z2): Z
+  def mk(fst: Z1, snd: Z2): This
 
   def productElement(n: Int) = n match {
     case 0 => fst

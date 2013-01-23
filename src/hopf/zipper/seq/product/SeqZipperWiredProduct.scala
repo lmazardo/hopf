@@ -1,7 +1,7 @@
 package hopf.zipper.seq.product
 
 import hopf.zipper.seq.SeqZipper
-
+/*
 abstract class SeqZipperWiredProduct[Z1 <: SeqZipper[Z1], Z2 <: SeqZipper[Z2]]
   (fst: Z1, snd: Z2)
 extends SeqZipperProduct[Z1, Z2, SeqZipperWiredProduct[Z1, Z2]](fst, snd) {
@@ -17,4 +17,4 @@ extends SeqZipperProduct[Z1, Z2, SeqZipperWiredProduct[Z1, Z2]](fst, snd) {
 
   def skipPrev(n: Int) = build(fst.skipPrev(n), snd.skipPrev(n))
   def skipNext(n: Int) = build(fst.skipNext(n), snd.skipNext(n))
-}
+}*/

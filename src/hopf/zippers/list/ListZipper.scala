@@ -1,17 +1,17 @@
 package hopf.zippers.list
 
 class ListZipper[Elem] (
-  prefix: List[Elem],
-  elem:   Elem,
-  suffix: List[Elem]
+  val prefix: List[Elem],
+  val elem:   Elem,
+  val suffix: List[Elem]
 )
-extends ListZipperTpl    [Elem] (prefix, elem, suffix)
-   with ListZipperMapTpl [Elem] {
+extends ListZipperTemplate[Elem] with ListZipperFunctoriality[Elem] {
+  type ThisPoly[X] = ListZipper[X]
+  type This        = ThisPoly[Elem]
 
-  type This = this.type
-  type ThisG[X] = ListZipper[X]
+  def self = this
 
-  def mkG[E](prefix: List[E], elem: E, suffix: List[E]) =
+  def mkPoly[E](prefix: List[E], elem: E, suffix: List[E]) =
     new ListZipper[E](prefix, elem, suffix)
 }
 

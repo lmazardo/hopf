@@ -9,13 +9,14 @@ class Zippers[C <: Context] private (val context: C) {
 
   class StatementZipper private (
     block:      Block,
-    prefix: List[Tree],
-    elem:   Tree,
-    suffix: List[Tree]
+    val prefix: List[Tree],
+    val elem:   Tree,
+    val suffix: List[Tree]
   )
-  extends ListZipperTpl[Tree](prefix, elem, suffix) {
+  extends ListZipperTemplate[Tree] {
+    type This = StatementZipper
 
-    type This = this.type
+    def self = this
 
     def mk(prefix: List[Tree], elem: Tree, suffix: List[Tree]) =
       new StatementZipper(block, prefix, elem, suffix)
