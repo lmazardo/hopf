@@ -31,8 +31,8 @@ trait ListZipperTemplate[Elem] extends SeqZipper with SeqZipperElems[Elem] {
     mk(sr.tail ++ (elem :: prefix), sr.head, newSuffix)
   }
 
-  def skipPrev(n: Int) = prevWithSplitter(_.splitAt(n))
-  def skipNext(n: Int) = nextWithSplitter(_.splitAt(n))
+  override def skipPrev(n: Int) = prevWithSplitter(_.splitAt(n))
+  override def skipNext(n: Int) = nextWithSplitter(_.splitAt(n))
 
   override def skipPrevWhileE(pred: Elem => Boolean) = prevWithSplitter(_.span(pred))
   override def skipNextWhileE(pred: Elem => Boolean) = nextWithSplitter(_.span(pred))

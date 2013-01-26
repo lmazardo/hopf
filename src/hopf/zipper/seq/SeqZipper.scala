@@ -9,35 +9,35 @@ trait SeqZipper {
   type This <: SeqZipper { type This = SeqZipper.this.This }
   def self: This
 
-  def isStart: Boolean
-  def isEnd:   Boolean
-
   /// / //             ////          //////
   // Movement
   //
   def start: This
   def end:   This
 
-  def prev: This
-  def next: This
+  def prev: Option[This]
+  def next: Option[This]
 
-  def skipPrev(n: Int): This
-  def skipNext(n: Int): This
+  def skipPrev(n: Int): Option[This] = Endo[This](_.prev).times(n)(self)
+  def skipNext(n: Int): Option[This] = Endo[This](_.next).times(n)(self)
 
-  def skipPrevUntil(pred: This => Boolean): This = Endo[This](_.skipPrev(1)).until(pred)(self)
-  def skipNextUntil(pred: This => Boolean): This = Endo[This](_.skipNext(1)).until(pred)(self)
+  def skipPrevUntil(pred: This => Boolean): Option[This] = Endo[This](_.skipPrev(1)).until(pred)(self)
+  def skipNextUntil(pred: This => Boolean): Option[This] = Endo[This](_.skipNext(1)).until(pred)(self)
 
-  def skipPrevWhile(pred: This => Boolean): This = skipPrevUntil(!pred(_))
-  def skipNextWhile(pred: This => Boolean): This = skipNextUntil(!pred(_))
-
-  /// / //             ////          //////
-  // Unbound movement
-  //
-  def prevUnbound: Option[This] = if (isStart) None else Some(prev)
-  def nextUnbound: Option[This] = if (isEnd)   None else Some(next)
+  def skipPrevWhile(pred: This => Boolean): Option[This] = skipPrevUntil(!pred(_))
+  def skipNextWhile(pred: This => Boolean): Option[This] = skipNextUntil(!pred(_))
 
   /// / //             ////          //////
-  // Fixpoint
+  // Bounded movement
   //
+  def prevBounded: This = prev.getOrElse(self)
+  def nextBounded: This = next.getOrElse(self)
+
+  /// / //             ////          //////
+  // Other
+  //
+  def isStart: Boolean
+  def isEnd:   Boolean
+
   def loop(f: This => Option[This]): This = f(self).map(_.loop(f)).getOrElse(self)
 }

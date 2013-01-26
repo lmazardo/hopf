@@ -1,10 +1,9 @@
-package hopf.syntactical.ast
+package hopf.zippers.ast
 
 import scala.reflect.macros.Context
-import hopf.functional.Endo
 import hopf.zippers.list._
 
-class Zippers[C <: Context] private (val context: C) {
+class AstZippers[C <: Context] private (val context: C) {
   import context.universe.{treeCopy => tc, _}
 
   class StatementZipper private (
@@ -35,27 +34,33 @@ class Zippers[C <: Context] private (val context: C) {
   }
 }
 
-object Zippers {
-  def inContext[C <: Context](context: C) = new Zippers[C](context)
+object AstZippers {
+  def withinContext[C <: Context](context: C) = new AstZippers[C](context)
 }
 
 object l {
-  val Z = Zippers inContext ???
-  import Z._
-  val z = StatementZipper ofBlock ???
+  val Z = AstZippers.withinContext(???)
+  val z = Z.StatementZipper.ofBlock(???)
   val x = z.next.next
 
   /*
-     [ macro-cps with zippers (dreamy ver.) ]
+     [ Macro-CPS with Zippers (dreamy ver.) ]
 
   def cpsStmts = StatementZipper.ofBlock(b).end
-    . attach(extractShiftyTerms)
-    . skipPrevWhile(_._2.bindings.isEmpty)
-    . wrapSuffix(cpsMap(_, _))
+    . attach(extractShiftyTerms).guarded {
+    _ skipPrevWhileA(_.bindings.isEmpty).map {
+    _ wrapSuffix(cpsMap(_, _))
     . loop {
-      _ skipPrevGuardedWhile(_.bindings.isEmpty)
-      . map(wrapSuffix(cpsFlatMap(_, _)))
-    } toBlock
+      _ skipPrevWhileA(_.bindings.isEmpty).map {
+      _ wrapSuffix(cpsFlatMap(_, _))
+    }}}} toBlock
+
+     [ Add log call after every ValDef in Block ]
+
+   StatementZipper.ofBlock(b).loop {
+     _ skipNextUntil(_.isValDef).map {
+     _ insertNext(someLogCall)
+   }} toBlock
 
  */
 }
