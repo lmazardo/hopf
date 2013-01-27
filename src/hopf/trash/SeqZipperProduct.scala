@@ -1,7 +1,5 @@
-package hopf.zipper.seq.product
-
-import hopf.zipper.seq.SeqZipper
-
+package hopf.trash
+/*
 trait SeqZipperProduct [
   Z1 <: SeqZipper,
   Z2 <: SeqZipper
@@ -19,4 +17,4 @@ extends SeqZipper with Product {
   }
 
   def productArity = 2
-}
+}*/

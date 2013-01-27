@@ -1,6 +1,8 @@
-package hopf.zippers.list
+package hopf.trash
 
+/*
 import hopf.zipper.seq._
+import hopf.zippers.list.ListZipperTemplate
 
 trait ListZipperFunctoriality[Elem] extends SeqZipperFunctoriality[Elem] { self: ListZipperTemplate[Elem] =>
 
@@ -10,4 +12,4 @@ trait ListZipperFunctoriality[Elem] extends SeqZipperFunctoriality[Elem] { self:
   def mkPoly[E](prefix: List[E], elem: E, suffix: List[E]): ThisPoly[E]
 
   def map[X](f: Elem => X) = mkPoly[X](prefix.map(f), f(elem), suffix.map(f))
-}
+}*/

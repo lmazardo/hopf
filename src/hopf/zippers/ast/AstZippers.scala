@@ -3,10 +3,10 @@ package hopf.zippers.ast
 import scala.reflect.macros.Context
 import hopf.zippers.list._
 
-class AstZippers[C <: Context] private (val context: C) {
+final class AstZippers[C <: Context] private (val context: C) {
   import context.universe.{treeCopy => tc, _}
 
-  class StatementZipper private (
+  final class StatementZipper private (
     block:      Block,
     val prefix: List[Tree],
     val elem:   Tree,
@@ -41,7 +41,7 @@ object AstZippers {
 object l {
   val Z = AstZippers.withinContext(???)
   val z = Z.StatementZipper.ofBlock(???)
-  val x = z.next.next
+  val x = z.next.map(_.next)
 
   /*
      [ Macro-CPS with Zippers (dreamy ver.) ]
