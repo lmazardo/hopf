@@ -1,9 +1,9 @@
-package hopf.zippers.list
+package hopf.zipper.list
 
-import hopf.zipper.seq._
+import hopf.zipper.SeqZpr
 
-trait ListZipperTemplate[Elem] extends SeqZipper[Elem] {
-  type Repr[X] = List[X]
+trait LZprTpl[Elem] extends SeqZpr[Elem] {
+  type Repr = List[Elem]
 
   def mk(prefix: List[Elem], elem: Elem, suffix: List[Elem]): This
 
@@ -24,11 +24,11 @@ trait ListZipperTemplate[Elem] extends SeqZipper[Elem] {
   /// / //             ////          //////
   // Wrappings
   //
-  def wrapPrefix(f: Repr[Elem] => Elem) = mk(List(f(prefix)), elem, suffix)
-  def wrapSuffix(f: Repr[Elem] => Elem) = mk(prefix, elem, List(f(suffix)))
+  def wrapPrefix(f: Repr => Elem) = mk(List(f(prefix)), elem, suffix)
+  def wrapSuffix(f: Repr => Elem) = mk(prefix, elem, List(f(suffix)))
 
-  def wrapPrefixInclusive(f: Elem => Repr[Elem] => Elem) = mk(Nil, f(elem)(prefix), suffix)
-  def wrapSuffixInclusive(f: Elem => Repr[Elem] => Elem) = mk(prefix, f(elem)(suffix), Nil)
+  def wrapPrefixInclusive(f: Elem => Repr => Elem) = mk(Nil, f(elem)(prefix), suffix)
+  def wrapSuffixInclusive(f: Elem => Repr => Elem) = mk(prefix, f(elem)(suffix), Nil)
 
   /// / //             ////          //////
   // Mappings
@@ -43,6 +43,6 @@ trait ListZipperTemplate[Elem] extends SeqZipper[Elem] {
   def insertPrev(x: Elem) = mk(x :: prefix, elem, suffix)
   def insertNext(x: Elem) = mk(prefix, elem, x :: suffix)
 
-  def insertPrevMany(xs: Repr[Elem]) = mk(xs ++ prefix, elem, suffix)
-  def insertNextMany(xs: Repr[Elem]) = mk(prefix, elem, xs ++ suffix)
+  def insertPrevMany(xs: Repr) = mk(xs ++ prefix, elem, suffix)
+  def insertNextMany(xs: Repr) = mk(prefix, elem, xs ++ suffix)
 }

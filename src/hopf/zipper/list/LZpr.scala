@@ -1,14 +1,14 @@
-package hopf.zippers.list
+package hopf.zipper.list
 
-import hopf.zipper.seq.SeqZipper
+import hopf.zipper.SeqZpr
 
-final class ListZipper[Elem] (
+final class LZpr[Elem] (
   val prefix: List[Elem],
   val elem:   Elem,
   val suffix: List[Elem]
 )
-extends ListZipperTemplate[Elem] with SeqZipper.Functoriality[Elem] {
-  type ThisPoly[X] = ListZipper[X]
+extends LZprTpl[Elem] with SeqZpr.Functor[Elem] {
+  type ThisPoly[X] = LZpr[X]
   type This        = ThisPoly[Elem]
 
   def self = this
@@ -16,7 +16,7 @@ extends ListZipperTemplate[Elem] with SeqZipper.Functoriality[Elem] {
   def map[X](f: Elem => X) = mkPoly[X](prefix.map(f), f(elem), suffix.map(f))
 
   def mkPoly[E](prefix: List[E], elem: E, suffix: List[E]) =
-    new ListZipper[E](prefix, elem, suffix)
+    new LZpr[E](prefix, elem, suffix)
 
   def mk(prefix: List[Elem], elem: Elem, suffix: List[Elem]) =
     mkPoly(prefix, elem, suffix)
